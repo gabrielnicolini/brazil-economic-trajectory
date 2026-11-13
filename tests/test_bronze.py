@@ -49,7 +49,7 @@ def test_bronze_sql_files_render_without_missing_placeholders():
 def test_load_bronze_runs_create_load_count_and_checks_rows(monkeypatch):
     monkeypatch.delenv("BET_CATALOG", raising=False)
     runner = FakeRunner(count=25415)
-    loaded = bronze.load_bronze("bcb_sgs", LANDING, "2026-11-13", 25415, runner)
+    loaded = bronze.load_bronze("bcb_sgs__observations", LANDING, "2026-11-13", 25415, runner)
     assert loaded == 25415
     assert len(runner.statements) == 3
     assert runner.statements[0].lstrip().startswith("-- Bronze table")
@@ -61,4 +61,6 @@ def test_load_bronze_runs_create_load_count_and_checks_rows(monkeypatch):
 def test_load_bronze_raises_on_count_mismatch(monkeypatch):
     monkeypatch.delenv("BET_CATALOG", raising=False)
     with pytest.raises(bronze.RowCountMismatch):
-        bronze.load_bronze("bcb_sgs", LANDING, "2026-11-13", 100, FakeRunner(count=99))
+        bronze.load_bronze(
+            "bcb_sgs__observations", LANDING, "2026-11-13", 100, FakeRunner(count=99)
+        )

@@ -20,7 +20,7 @@ from ingestion.common.bronze import load_bronze
 from ingestion.common.sql import WorkspaceSqlRunner
 from ingestion.common.upload import upload_parquet
 
-SOURCES = ("bcb_sgs",)
+SOURCES = ("bcb_sgs", "world_bank_wdi", "world_bank_wdi_countries")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -40,8 +40,10 @@ def main(argv: list[str] | None = None) -> int:
     args.out.mkdir(parents=True, exist_ok=True)
     target = args.out / f"{args.source}.parquet"
     frame.to_parquet(target, index=False)
-    indicators = frame["indicator_code"].nunique()
-    print(f"{args.source}: {len(frame)} rows, {indicators} indicators -> {target}")
+    detail = (
+        f", {frame['indicator_code'].nunique()} indicators" if "indicator_code" in frame else ""
+    )
+    print(f"{args.source}: {len(frame)} rows{detail} -> {target}")
 
     if args.upload or args.load_bronze:
         ingested_at = datetime.now(tz=UTC)
@@ -49,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{args.source}: uploaded to {volume_file}")
         if args.load_bronze:
             loaded = load_bronze(
-                args.source,
+                getattr(module, "BRONZE_TABLE", f"{args.source}__observations"),
                 volume_file,
                 ingested_at.strftime("%Y-%m-%d"),
                 len(frame),

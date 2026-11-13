@@ -13,7 +13,7 @@ class RowCountMismatch(RuntimeError):
 
 
 def load_bronze(
-    source: str,
+    table: str,
     landing_file: str,
     ingested_date: str,
     expected_rows: int,
@@ -25,7 +25,6 @@ def load_bronze(
     Returns the number of rows bronze holds for this landing file. Raises
     ``RowCountMismatch`` if it differs from ``expected_rows``.
     """
-    table = f"{source}__observations"
     catalog = catalog_name()
     runner.execute(render(sql_root / "bronze" / f"{table}.sql", catalog=catalog))
     runner.execute(
