@@ -40,45 +40,62 @@ Each criterion is evaluated on World Bank WDI data for the year 2000 (or the
 nearest available year), by code in this repository. No country is admitted
 or excluded by judgment alone.
 
-| # | Criterion                 | Rule                                                                 | Indicator (WDI code)                        |
-|---|---------------------------|----------------------------------------------------------------------|---------------------------------------------|
-| 1 | Income level in 2000      | Upper-middle income or lower-middle income by the World Bank's 2000 classification | World Bank income classification, FY2001    |
-| 2 | Economic size             | Population of at least 20 million in 2000                            | `SP.POP.TOTL`                               |
-| 3 | Market economy            | Not a centrally planned economy in 2000                              | Documented exclusion list                   |
-| 4 | Data availability         | GDP per capita (PPP) available for at least 90 percent of 2000-2023  | `NY.GDP.PCAP.PP.KD`                         |
+| # | Criterion            | Rule                                                                              | Indicator (WDI code)                     |
+|---|----------------------|-----------------------------------------------------------------------------------|------------------------------------------|
+| 1 | Income level in 2000 | Lower-middle or upper-middle income by the World Bank's FY2001 classification     | World Bank income classification history |
+| 2 | Economic size        | Population of at least 20 million in 2000                                         | `SP.POP.TOTL`                            |
+| 3 | Data availability    | GDP per capita (PPP) available for at least 90 percent of the years 2000-2023     | `NY.GDP.PCAP.PP.KD`                      |
 
-Countries meeting criteria 1-4 form the **broad peer set**, used for panel
-regressions (H4, H5) and for descriptive charts.
+Countries meeting criteria 1-3 form the **broad peer set**: emerging and
+developing economies of comparable income and size. Transition economies
+(China, Russia, Vietnam and others) are included when they meet the
+criteria; the structural break of the 1990s is handled in the models, not by
+exclusion. The broad set is used for panel regressions (H4, H5) and for
+descriptive charts.
 
-Two sub-sets are derived from it for specific hypotheses:
+Four sub-sets are derived from it by rule, for hypotheses that need a
+closer comparator:
 
-| Sub-set              | Additional rule                                                        | Indicator (WDI code)                                      | Used by |
-|----------------------|------------------------------------------------------------------------|-----------------------------------------------------------|---------|
-| Commodity exporters  | Primary commodities (fuels, ores and metals, agricultural raw materials, food) above 50 percent of merchandise exports, average 2000-2002 | `TX.VAL.FUEL.ZS.UN`, `TX.VAL.MMTL.ZS.UN`, `TX.VAL.AGRI.ZS.UN`, `TX.VAL.FOOD.ZS.UN` | H6, H7 |
-| Latin America        | World Bank region "Latin America and Caribbean"                        | WDI region metadata                                       | Charts  |
+| Sub-set              | Additional rule                                                                                                    | Indicator (WDI code)                                                                | Used by |
+|----------------------|--------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|---------|
+| Similar income       | GDP per capita (PPP) in 2000 between 0.5x and 2x Brazil's                                                          | `NY.GDP.PCAP.PP.KD`                                                                 | H6      |
+| Large countries      | Land area of at least 1 million square kilometers                                                                  | `AG.LND.TOTL.K2`                                                                    | Charts, H5 |
+| Commodity exporters  | Fuels, ores and metals, agricultural raw materials and food above 50 percent of merchandise exports, average 2000-2002 | `TX.VAL.FUEL.ZS.UN`, `TX.VAL.MMTL.ZS.UN`, `TX.VAL.AGRI.ZS.UN`, `TX.VAL.FOOD.ZS.UN` | H6, H7  |
+| Latin America        | World Bank region "Latin America and Caribbean"                                                                     | WDI region metadata                                                                 | Charts  |
 
 ### Reference set for presentation
 
-For charts that cannot show the whole broad set, a fixed reference set of
-up to eight countries is drawn from it by rule, not by hand: the four largest
-economies in Latin America by 2000 GDP (PPP) other than Brazil, plus the four
-largest commodity exporters outside Latin America that meet the broad
-criteria. The resulting list is written to `gold.peer_countries` with the
-criterion each country satisfied, and copied here when frozen.
+Charts that cannot show the whole broad set use a fixed reference set of
+**sixteen countries**, drawn from the broad set by rule, in this order, with
+duplicates removed at each step:
+
+1. The six largest Latin American economies by 2000 GDP (PPP) other than
+   Brazil.
+2. The five largest commodity exporters outside Latin America, by 2000 GDP
+   (PPP).
+3. The five largest countries by land area not yet selected.
+4. If fewer than sixteen remain after deduplication, fill from the broad set
+   in descending order of 2000 GDP (PPP).
+
+GDP (PPP) uses `NY.GDP.MKTP.PP.KD`. The resulting list is written to
+`gold.peer_countries` with the step and criterion each country satisfied,
+and copied here when frozen.
 
 ### What is deliberately excluded
 
 - High-income countries in 2000: a different growth regime; used only as a
   benchmark line, never as peers or donors.
-- Countries below 20 million people: small open economies behave differently.
-- Centrally planned economies in 2000: structural break incompatible with
-  a 2000 baseline.
+- Low-income countries in 2000: a different development stage; shown in
+  world aggregates only.
+- Countries below 20 million people: small open economies behave
+  differently.
 
 ### Known limitations
 
-- Thresholds (20 million, 50 percent, 90 percent) are judgment calls. They
-  are documented here so they can be criticized, and sensitivity to them is
-  reported in Phase 5.
+- Thresholds (20 million people, 0.5x-2x income band, 1 million square
+  kilometers, 50 percent commodity share, 90 percent data coverage) are
+  judgment calls. They are documented here so they can be criticized, and
+  sensitivity to them is reported in Phase 5.
 - Synthetic-control donor pools may be narrower than the broad set when a
   hypothesis requires it (for example, H3 uses listed oil companies, not
   countries). Each model documents its own pool.
