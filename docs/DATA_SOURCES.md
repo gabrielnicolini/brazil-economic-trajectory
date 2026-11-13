@@ -2,11 +2,11 @@
 
 | Source                     | Indicators                                         | Access        | Status  |
 |----------------------------|----------------------------------------------------|---------------|---------|
-| BCB / SGS                  | Selic, IPCA, FX, credit, public debt (`ingestion/sources/bcb_sgs.py`) | API           | extractor |
+| BCB / SGS                  | Selic, IPCA, FX, credit, public debt (`ingestion/sources/bcb_sgs.py`) | API           | bronze    |
 | IBGE / SIDRA               | GDP, employment, PNAD                              | API           | planned |
 | Ipeadata                   | Long macro and social series                       | API           | planned |
 | Tesouro Nacional           | Primary balance, spending, subsidies               | API / files   | planned |
-| World Bank WDI             | GDP per capita, PPP, trade, health, education      | API           | planned |
+| World Bank WDI             | GDP, population, area, trade, exports by category, inflation, investment, debt, poverty (`ingestion/sources/world_bank_wdi.py`, `world_bank_wdi_countries.py`) | API | bronze |
 | IMF WEO                    | Cross-country macro, fiscal                        | Files         | planned |
 | Penn World Table           | TFP, capital, PPP output                           | Files         | planned |
 | UNDP                       | HDI and components                                 | Files         | planned |
@@ -43,6 +43,38 @@ portal before a series is used in a model; values come only from the API.
 
 Focus market expectations are served by a different BCB API (Olinda) and
 will be a separate extractor.
+
+## World Bank WDI indicator catalog
+
+Indicators extracted by `ingestion/sources/world_bank_wdi.py` for every
+economy code the API returns (aggregates included; separated in silver using
+`world_bank_wdi_countries`). The description column is the author's reading
+of the WDI indicator name and must be confirmed against the API's indicator
+metadata before a series is used in a model; values come only from the API.
+
+| WDI code            | Indicator code                | Unit                | Description (to confirm)                           |
+|---------------------|-------------------------------|---------------------|----------------------------------------------------|
+| NY.GDP.PCAP.PP.KD   | `gdp_per_capita_ppp`          | `usd_ppp_2021`      | GDP per capita, PPP, constant international $      |
+| NY.GDP.MKTP.PP.KD   | `gdp_ppp`                     | `usd_ppp_2021`      | GDP, PPP, constant international $                 |
+| NY.GDP.MKTP.KD.ZG   | `gdp_growth`                  | `pct_pa`            | GDP growth, annual                                 |
+| SP.POP.TOTL         | `population`                  | `persons`           | Population, total                                  |
+| AG.LND.TOTL.K2      | `land_area`                   | `sq_km`             | Land area                                          |
+| NE.TRD.GNFS.ZS      | `trade_gdp`                   | `pct_gdp`           | Trade, % of GDP                                    |
+| TX.VAL.FUEL.ZS.UN   | `fuel_exports_share`          | `pct_merch_exports` | Fuel exports, % of merchandise exports             |
+| TX.VAL.MMTL.ZS.UN   | `ores_metals_exports_share`   | `pct_merch_exports` | Ores and metals exports, % of merchandise exports  |
+| TX.VAL.AGRI.ZS.UN   | `agri_raw_exports_share`      | `pct_merch_exports` | Agricultural raw materials exports, % of merch.    |
+| TX.VAL.FOOD.ZS.UN   | `food_exports_share`          | `pct_merch_exports` | Food exports, % of merchandise exports             |
+| FP.CPI.TOTL.ZG      | `cpi_inflation`               | `pct_pa`            | Inflation, consumer prices, annual                 |
+| NE.GDI.TOTL.ZS      | `gross_capital_formation_gdp` | `pct_gdp`           | Gross capital formation, % of GDP                  |
+| GC.DOD.TOTL.GD.ZS   | `central_gov_debt_gdp`        | `pct_gdp`           | Central government debt, total, % of GDP           |
+| SI.POV.GINI         | `gini_index`                  | `index`             | Gini index                                         |
+| SI.POV.DDAY         | `poverty_headcount_ipl`       | `pct_pop`           | Poverty headcount ratio at the international line  |
+| SL.UEM.TOTL.ZS      | `unemployment_rate`           | `pct_labor_force`   | Unemployment, total, % of labor force              |
+
+The country list (`world_bank_wdi_countries`) carries region, the *current*
+income level and an `is_aggregate` flag. The income classification for the
+year 2000, required by the peer-country criteria, is a separate historical
+file from the World Bank and will be its own dataset.
 
 ## Peer countries
 

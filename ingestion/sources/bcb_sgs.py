@@ -27,6 +27,7 @@ from ingestion.common.http import get_json
 from ingestion.common.schema import STANDARD_COLUMNS, validate
 
 SOURCE = "bcb_sgs"
+BRONZE_TABLE = "bcb_sgs__observations"
 COUNTRY = "BRA"
 BASE_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados"
 DEFAULT_START = date(2000, 1, 1)

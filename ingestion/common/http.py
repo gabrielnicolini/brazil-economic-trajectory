@@ -8,8 +8,8 @@ from typing import Any
 import requests
 
 DEFAULT_TIMEOUT_SECONDS = 60
-DEFAULT_RETRIES = 4
-DEFAULT_BACKOFF_SECONDS = 2.0
+DEFAULT_RETRIES = 6
+DEFAULT_BACKOFF_SECONDS = 3.0
 USER_AGENT = "brazil-economic-trajectory/0.1 (+https://github.com/gabrielnicolini/brazil-economic-trajectory)"
 
 RETRYABLE_STATUS = {429, 500, 502, 503, 504}
