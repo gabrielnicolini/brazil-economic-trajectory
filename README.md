@@ -12,7 +12,6 @@ model-based counterfactual scenarios.
 2. **Same yardstick for every administration** (2000 to today).
 3. **Hypotheses are written before models are run** (`docs/HYPOTHESES.md`),
    and results are published whether or not they confirm them.
-4. **Everything is in English**: code, tables, columns, charts, site.
 
 ## Architecture
 
