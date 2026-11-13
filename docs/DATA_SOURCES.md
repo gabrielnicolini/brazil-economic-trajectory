@@ -2,7 +2,7 @@
 
 | Source                     | Indicators                                         | Access        | Status  |
 |----------------------------|----------------------------------------------------|---------------|---------|
-| BCB / SGS                  | Selic, IPCA, FX, credit, public debt, expectations | API           | planned |
+| BCB / SGS                  | Selic, IPCA, FX, credit, public debt (`ingestion/sources/bcb_sgs.py`) | API           | extractor |
 | IBGE / SIDRA               | GDP, employment, PNAD                              | API           | planned |
 | Ipeadata                   | Long macro and social series                       | API           | planned |
 | Tesouro Nacional           | Primary balance, spending, subsidies               | API / files   | planned |
@@ -21,6 +21,28 @@
 | RAIS / CAGED               | Formal employment by sector                        | Files         | planned |
 | MDS / MEC payment records  | Social transfers (gas aid, Pe-de-Meia, others)     | Portal / files| planned |
 | INEP microdata             | SAEB, ENEM, School Census (learning vs attendance) | Files         | planned |
+
+## BCB / SGS series catalog
+
+Series extracted by `ingestion/sources/bcb_sgs.py`. The description column
+is the author's reading of the SGS metadata and must be confirmed on the SGS
+portal before a series is used in a model; values come only from the API.
+
+| SGS code | Indicator code          | Unit          | Freq | Description (to confirm)                  |
+|----------|-------------------------|---------------|------|-------------------------------------------|
+| 432      | `selic_target_rate`     | `pct_pa`      | D    | Selic target rate set by the Copom        |
+| 11       | `selic_daily_rate`      | `pct_per_day` | D    | Selic effective daily rate                |
+| 433      | `ipca_monthly_change`   | `pct_mom`     | M    | IPCA monthly change                       |
+| 13522    | `ipca_12m_change`       | `pct_12m`     | M    | IPCA accumulated over 12 months           |
+| 1        | `usd_brl_sell_rate`     | `brl_per_usd` | D    | USD/BRL PTAX selling rate                 |
+| 3698     | `usd_brl_monthly_avg`   | `brl_per_usd` | M    | USD/BRL monthly average                   |
+| 13762    | `net_public_debt_gdp`   | `pct_gdp`     | M    | Public sector net debt, % of GDP          |
+| 4513     | `gross_gov_debt_gdp`    | `pct_gdp`     | M    | General government gross debt, % of GDP   |
+| 20539    | `credit_total_stock`    | `brl_million` | M    | Total credit outstanding                  |
+| 24364    | `ibc_br_index`          | `index`       | M    | IBC-Br economic activity index            |
+
+Focus market expectations are served by a different BCB API (Olinda) and
+will be a separate extractor.
 
 ## Peer countries
 
