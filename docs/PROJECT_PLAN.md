@@ -30,7 +30,7 @@ Each phase ends with: CI green, docs updated, one LinkedIn/X post.
 ### Phase 1 - Foundation
 - **Deliverables:** repo scaffold, CI, methodology, conventions, hypotheses draft.
 - **Accept when:** CI passes on GitHub; decisions above are ticked.
-- [ ] Accepted
+- [x] Accepted
 
 ### Phase 2 - Ingestion
 - **Deliverables:** one extractor per source, scheduled workflow, upload to

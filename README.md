@@ -54,8 +54,8 @@ Data sources and peer-country criteria: [`docs/DATA_SOURCES.md`](docs/DATA_SOURC
 
 | Phase | Scope                                             | Status      |
 |-------|---------------------------------------------------|-------------|
-| 1     | Foundation: repo, CI, methodology, hypotheses     | In progress |
-| 2     | Ingestion, one source at a time                   | Not started |
+| 1     | Foundation: repo, CI, methodology, hypotheses     | Accepted    |
+| 2     | Ingestion, one source at a time                   | In progress |
 | 3     | Data modeling: country-year-indicator panel       | Not started |
 | 4     | Descriptive analysis and site v1                  | Not started |
 | 5     | Counterfactual models                             | Not started |
