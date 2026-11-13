@@ -76,6 +76,28 @@ Nash equilibrium and the cooperative (commitment) outcome highlighted.
    a value judgment, so they are explicit, and adjustable by the reader on
    the site. The default weights are documented and frozen before scoring.
 
+## Chart conventions for cross-country comparisons
+
+Every chart of a macroeconomic indicator (GDP per capita PPP, inflation,
+public debt, investment and others) shows the same set of lines, for every
+indicator and every administration:
+
+1. **Brazil**, highlighted.
+2. **The best performer** in the broad peer set over the period shown,
+   named on the chart. "Best" is the desirable extreme for that indicator
+   (highest cumulative growth for GDP, lowest for inflation and debt) and is
+   defined once per indicator in the indicator dictionary.
+3. **Three group averages:** OECD members (high-income benchmark), the broad
+   emerging peer set, and Latin America. Averages are simple means unless
+   the indicator dictionary says otherwise, and the composition of each
+   group is fixed in `gold.peer_countries`.
+4. **China**, as a fixed individual line.
+
+Growth comparisons are shown as cumulative percentage change from the
+period's first year, so countries with different levels can be read on one
+axis. Level comparisons use the original unit. Every chart states its gold
+table, commit hash and the period's first and last year.
+
 ## Reproducibility
 
 - All raw data is stored unmodified with source URL and ingestion timestamp.
