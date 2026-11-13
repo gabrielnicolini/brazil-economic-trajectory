@@ -18,7 +18,11 @@ FIXTURES = Path(__file__).parent / "fixtures" / "world_bank_wdi"
 def fake_fetch(url: str, params: dict) -> list:
     assert params["format"] == "json"
     if url == countries.URL:
-        return json.loads((FIXTURES / f"countries_page{params['page']}.json").read_text())
+        # Real pages 1 and 2 of the country list; the page count is capped to two
+        # so the test exercises pagination without needing all 74 pages on disk.
+        payload = json.loads((FIXTURES / f"countries_page{params['page']}.json").read_text())
+        payload[0]["pages"] = 2
+        return payload
     code = url.rsplit("/", 1)[1]
     return json.loads((FIXTURES / f"{code}.json").read_text())
 
