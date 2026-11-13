@@ -10,7 +10,7 @@ the item yourself.
 - [x] Repository visibility: public from day one
 - [x] Unity Catalog name: `brazil_econ` (fall back to `workspace` if Free
       Edition cannot create catalogs)
-- [ ] Databricks Free Edition limits checked in the current docs (outbound
+- [x] Databricks Free Edition limits checked in the current docs (outbound
       network access, compute quotas, export options)
 - [ ] GitHub Actions free-tier limits checked for the chosen visibility
 - [ ] Ingestion schedule (suggested: weekly)
