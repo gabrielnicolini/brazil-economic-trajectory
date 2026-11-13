@@ -18,8 +18,10 @@ the item yourself.
 - [x] Site framework and hosting: Astro on Cloudflare Pages
 - [x] License: MIT for code (`LICENSE`), CC BY 4.0 for data outputs, charts
       and site content (`LICENSE-DATA`)
-- [ ] Peer-country selection criteria and final list
-- [ ] The ten hypotheses in `HYPOTHESES.md` reviewed and edited
+- [x] Peer-country selection criteria (`docs/DATA_SOURCES.md`); the list is
+      produced by code in Phase 2 and frozen then
+- [x] The ten hypotheses in `HYPOTHESES.md` reviewed and edited (frozen
+      before Phase 5)
 
 ## Phases
 
