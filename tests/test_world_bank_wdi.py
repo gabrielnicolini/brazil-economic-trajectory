@@ -81,7 +81,7 @@ def test_catalog_codes_are_unique():
 
 
 @pytest.mark.skipif(
-    not (FIXTURES / "countries_page1.json").read_text().startswith("["),
+    not (FIXTURES / "countries_page1.json").exists(),
     reason="country metadata fixture not captured yet",
 )
 def test_countries_are_flattened_and_aggregates_flagged():
