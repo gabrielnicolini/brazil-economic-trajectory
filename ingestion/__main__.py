@@ -1,8 +1,9 @@
-"""Command-line entry point: ``python -m ingestion <source> [--upload]``.
+"""Command-line entry point: ``python -m ingestion <source> [--upload] [--load-bronze]``.
 
 Runs one extractor, writes its output as ``<source>.parquet`` in the output
-directory and, with ``--upload``, copies the file to the Unity Catalog
-landing Volume. Extraction never needs Databricks credentials, so it can be
+directory, with ``--upload`` copies the file to the Unity Catalog landing
+Volume and with ``--load-bronze`` appends it to the bronze table and checks
+the row count against the file. Extraction never needs Databricks credentials, so it can be
 run and tested locally; only the upload step reads ``DATABRICKS_HOST`` and
 ``DATABRICKS_TOKEN`` from the environment.
 """
@@ -12,8 +13,11 @@ from __future__ import annotations
 import argparse
 import importlib
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
+from ingestion.common.bronze import load_bronze
+from ingestion.common.sql import WorkspaceSqlRunner
 from ingestion.common.upload import upload_parquet
 
 SOURCES = ("bcb_sgs",)
@@ -24,6 +28,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("source", choices=SOURCES, help="extractor to run")
     parser.add_argument("--out", type=Path, default=Path("data/raw"), help="output directory")
     parser.add_argument("--upload", action="store_true", help="upload to the landing Volume")
+    parser.add_argument(
+        "--load-bronze",
+        action="store_true",
+        help="load the uploaded file into bronze (implies --upload)",
+    )
     args = parser.parse_args(argv)
 
     module = importlib.import_module(f"ingestion.sources.{args.source}")
@@ -34,9 +43,19 @@ def main(argv: list[str] | None = None) -> int:
     indicators = frame["indicator_code"].nunique()
     print(f"{args.source}: {len(frame)} rows, {indicators} indicators -> {target}")
 
-    if args.upload:
-        volume_file = upload_parquet(target, args.source)
+    if args.upload or args.load_bronze:
+        ingested_at = datetime.now(tz=UTC)
+        volume_file = upload_parquet(target, args.source, ingested_date=ingested_at)
         print(f"{args.source}: uploaded to {volume_file}")
+        if args.load_bronze:
+            loaded = load_bronze(
+                args.source,
+                volume_file,
+                ingested_at.strftime("%Y-%m-%d"),
+                len(frame),
+                WorkspaceSqlRunner(),
+            )
+            print(f"{args.source}: bronze holds {loaded} rows for this file (matches source)")
     return 0
 
 

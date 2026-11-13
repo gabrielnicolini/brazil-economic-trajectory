@@ -2,7 +2,7 @@
 
 | Source                     | Indicators                                         | Access        | Status  |
 |----------------------------|----------------------------------------------------|---------------|---------|
-| BCB / SGS                  | Selic, IPCA, FX, credit, public debt (`ingestion/sources/bcb_sgs.py`) | API           | extractor |
+| BCB / SGS                  | Selic, IPCA, FX, credit, public debt (`ingestion/sources/bcb_sgs.py`) | API           | bronze    |
 | IBGE / SIDRA               | GDP, employment, PNAD                              | API           | planned |
 | Ipeadata                   | Long macro and social series                       | API           | planned |
 | Tesouro Nacional           | Primary balance, spending, subsidies               | API / files   | planned |
