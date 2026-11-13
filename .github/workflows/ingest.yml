@@ -1,0 +1,39 @@
+name: Ingest
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  extract-and-upload:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [bcb_sgs]
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+      - name: Extract and upload ${{ matrix.source }}
+        run: python -m ingestion ${{ matrix.source }} --upload
+      - name: Keep the Parquet file as a run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-${{ matrix.source }}-${{ github.run_id }}
+          path: data/raw/${{ matrix.source }}.parquet
+          retention-days: 14
