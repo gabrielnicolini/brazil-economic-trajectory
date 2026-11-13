@@ -54,3 +54,8 @@ ruff check . && pytest
 - [ ] Phase 7 - Strategic analysis (game theory) and policy scorecard
 - [ ] Phase 8 - "What if" scenario pages
 - [ ] Phase 9 - Content (continuous)
+
+## License
+
+Code: MIT (`LICENSE`). Data outputs, charts and site content: CC BY 4.0
+(`LICENSE-DATA`). Raw third-party data keeps its original terms.
