@@ -12,10 +12,12 @@ the item yourself.
       Edition cannot create catalogs)
 - [x] Databricks Free Edition limits checked in the current docs (outbound
       network access, compute quotas, export options)
-- [ ] GitHub Actions free-tier limits checked for the chosen visibility
-- [ ] Ingestion schedule (suggested: weekly)
-- [ ] Site framework and hosting (suggested: Astro on Cloudflare Pages or Vercel)
-- [ ] License for code and for data outputs
+- [x] GitHub Actions free-tier limits checked for the chosen visibility
+      (public repository: standard GitHub-hosted runners have no minute cap)
+- [x] Ingestion schedule: weekly, Mondays 06:00 UTC
+- [x] Site framework and hosting: Astro on Cloudflare Pages
+- [x] License: MIT for code (`LICENSE`), CC BY 4.0 for data outputs, charts
+      and site content (`LICENSE-DATA`)
 - [ ] Peer-country selection criteria and final list
 - [ ] The ten hypotheses in `HYPOTHESES.md` reviewed and edited
 
